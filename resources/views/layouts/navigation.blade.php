@@ -21,35 +21,54 @@
                     <x-nav-link :href="route('sgc')" :active="request()->routeIs('sgc')">
                         {{ __('SGC') }}
                     </x-nav-link>
-                </div>
-                {{-- Dropdown en responsive --}}
-                <div x-data="{ open: false }" class="space-y-1 py-2 sm:py-0 space-x-8 relative z-50">
-                    {{-- Botón para abrir el dropdown --}}
-                        <button @click="open = !open"
-                            class="w-full text-left px-4 py-4 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none transition">
-                            {{ __('Tableros BI') }}
-                        </button>
+                
+                    {{-- Dropdown en responsive --}}
+                    <div x-data="{ open: false }" class="space-y-1 py-0 sm:py-0 space-x-2 relative z-50">
+                        {{-- Botón para abrir el dropdown --}}
+                            <button @click="open = !open"
+                                class="w-full text-left px-2 py-4 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none transition">
+                                {{ __('Reuniones') }}
+                            </button>
 
-                    <div x-show="open" class="space-y-1 pl-4" x-cloak>
-                        <x-responsive-nav-link :active="request()->routeIs('opcion1')">
-                            {{ __('Analitico de Vencimientos') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :active="request()->routeIs('opcion2')">
-                            {{ __('Presupuesto Administrativo') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :active="request()->routeIs('opcion2')">
-                            {{ __('Valor Proyecto') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :active="request()->routeIs('opcion2')">
-                            {{ __('Cobranza 2025') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link :active="request()->routeIs('opcion2')">
-                            {{ __('Presupuesto MKT') }}
-                        </x-responsive-nav-link>
+                        <div x-show="open" class="power space-y-1 pl-4" x-cloak>
+                            <x-responsive-nav-link :href="route('sala')" target="_blank" :active="request()->routeIs('opcion1')">
+                                {{ __('Sala de Juntas') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('comedor')" target="_blank" :active="request()->routeIs('opcion2')">
+                                {{ __('Comedor') }}
+                            </x-responsive-nav-link>
+                        </div>
+                    </div>
+
+
+                    {{-- Dropdown en responsive --}}
+                    <div x-data="{ open: false }" class="space-y-1 py-0 sm:py-0 space-x-2 relative z-50">
+                        {{-- Botón para abrir el dropdown --}}
+                            <button @click="open = !open"
+                                class="w-full text-left px-2 py-4 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none transition">
+                                {{ __('Tableros BI') }}
+                            </button>
+
+                        <div x-show="open" class="power space-y-1 pl-4" x-cloak>
+                            <x-responsive-nav-link href="https://app.powerbi.com/links/WbQQljIF9B?ctid=c9773dbb-728b-4a0c-bc43-bc181a28a289&pbi_source=linkShare" target="_blank" :active="request()->routeIs('opcion1')">
+                                {{ __('Analitico de Vencimientos') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link href="https://app.powerbi.com/links/ClCv1pzoeE?ctid=c9773dbb-728b-4a0c-bc43-bc181a28a289&pbi_source=linkShare" target="_blank" :active="request()->routeIs('opcion2')">
+                                {{ __('Presupuesto Administrativo') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiMzkwY2JkN2YtMzRkNy00ZDVkLWJhNzMtNzdhMzIxZWU3NTUwIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9" target="_blank" :active="request()->routeIs('opcion2')">
+                                {{ __('Valor Proyecto') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiNTZkMzFjNzMtOWE0MC00N2FiLWFiNWYtNDAxNDgyZTQ0YWEyIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9 " target="_blank" :active="request()->routeIs('opcion2')">
+                                {{ __('Cobranza 2025') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiZDA1OTIyOWItOTBkYy00YzJmLWEzMzUtMTU0OGJjYjZhMDQwIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9 " target="_blank" :active="request()->routeIs('opcion2')">
+                                {{ __('Presupuesto MKT') }}
+                            </x-responsive-nav-link>
+                        </div>
                     </div>
                 </div>
             </div>
-
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
@@ -99,36 +118,66 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-    {{-- Enlaces principales --}}
-    <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-        {{ __('Inicio') }}
-    </x-responsive-nav-link>
+            {{-- Enlaces principales --}}
+        <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            {{ __('Inicio') }}
+        </x-responsive-nav-link>
 
-    <x-responsive-nav-link :href="route('directorio')" :active="request()->routeIs('directorio')">
-        {{ __('Directorio') }}
-    </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('directorio')" :active="request()->routeIs('directorio')">
+            {{ __('Directorio') }}
+        </x-responsive-nav-link>
 
-    <x-responsive-nav-link :href="route('sgc')" :active="request()->routeIs('sgc')">
-        {{ __('SGC') }}
-    </x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('sgc')" :active="request()->routeIs('sgc')">
+            {{ __('SGC') }}
+        </x-responsive-nav-link>
 
-    {{-- Dropdown en responsive --}}
-    <div x-data="{ open: false }" class="space-y-1">
-        <button @click="open = !open"
-            class="w-full text-left px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none transition">
-            {{ __('Más opciones') }}
-        </button>
+        {{-- Dropdown en responsive --}}
+        <div x-data="{ open: false }" class="space-y-1">
+        {{-- Dropdown en responsive --}}
+            <div x-data="{ open: false }" class="space-y-1 py-2 sm:py-0 space-x-8 relative z-50">
+                {{-- Botón para abrir el dropdown --}}
+                    <button @click="open = !open"
+                        class="w-full text-left px-4 py-4 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none transition">
+                        {{ __('Reuniones') }}
+                    </button>
 
-        <div x-show="open" class="space-y-1 pl-4" x-cloak>
-            <x-responsive-nav-link :active="request()->routeIs('opcion1')">
-                {{ __('Opción 1') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :active="request()->routeIs('opcion2')">
-                {{ __('Opción 2') }}
-            </x-responsive-nav-link>
+                    <div x-show="open" class="power space-y-1 pl-4" x-cloak>
+                        <x-responsive-nav-link :href="route('sala')" :active="request()->routeIs('opcion1')">
+                            {{ __('Sala de Juntas') }}
+                        </x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('comedor')" :active="request()->routeIs('opcion2')">
+                            {{ __('Comedor') }}
+                        </x-responsive-nav-link>
+                    </div>
+                </div>
+        {{-- Dropdown en responsive --}}
+            <div x-data="{ open: false }" class="space-y-1 py-2 sm:py-0 space-x-8 relative z-50">
+                {{-- Botón para abrir el dropdown --}}
+                    <button @click="open = !open"
+                        class="w-full text-left px-4 py-4 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none transition">
+                        {{ __('Tableros BI') }}
+                    </button>
+
+                <div x-show="open" class="power space-y-1 pl-4" x-cloak>
+                    <x-responsive-nav-link href="https://app.powerbi.com/links/WbQQljIF9B?ctid=c9773dbb-728b-4a0c-bc43-bc181a28a289&pbi_source=linkShare" target="_blank" :active="request()->routeIs('opcion1')">
+                        {{ __('Analitico de Vencimientos') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link href="https://app.powerbi.com/links/ClCv1pzoeE?ctid=c9773dbb-728b-4a0c-bc43-bc181a28a289&pbi_source=linkShare" target="_blank" :active="request()->routeIs('opcion2')">
+                        {{ __('Presupuesto Administrativo') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiMzkwY2JkN2YtMzRkNy00ZDVkLWJhNzMtNzdhMzIxZWU3NTUwIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9" target="_blank" :active="request()->routeIs('opcion2')">
+                        {{ __('Valor Proyecto') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiNTZkMzFjNzMtOWE0MC00N2FiLWFiNWYtNDAxNDgyZTQ0YWEyIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9 " target="_blank" :active="request()->routeIs('opcion2')">
+                        {{ __('Cobranza 2025') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiZDA1OTIyOWItOTBkYy00YzJmLWEzMzUtMTU0OGJjYjZhMDQwIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9 " target="_blank" :active="request()->routeIs('opcion2')">
+                        {{ __('Presupuesto MKT') }}
+                    </x-responsive-nav-link>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
 
         <!-- Responsive Settings Options -->

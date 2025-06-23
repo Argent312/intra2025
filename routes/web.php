@@ -21,6 +21,17 @@ Route::get('/SGC', function () {
     return view('sgc');
 })->middleware(['auth', 'verified'])->name('sgc');
 
+
+Route::get('/comedor', function () {
+    return view('comedor');
+})->middleware(['auth', 'verified'])->name('comedor');
+Route::get('/sala', function () {
+    return view('sala');
+})->middleware(['auth', 'verified'])->name('sala');
+Route::get('/Revista', function () {
+    return view('picoteando');
+})->middleware(['auth', 'verified'])->name('picoteando');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

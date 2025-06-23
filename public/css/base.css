@@ -26,7 +26,61 @@
         
     }
 }
+/* Styles for the dashboard page */
+.hero{
+    background-image: url("/imagenes/hero/hero.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 120%;
+    display: flex;
+    align-items: end;
+    justify-content: flex-end;
+    margin-top: -3%;
+    
+    img{
+        width: 60%;
+        padding: 2% 1%;
+        border-radius: 10px;
+        background-color: rgba(80, 80, 80, 0.3); padding: 20px;
+        
+    }
+    .content{
+        padding: 2% 0%;
+    }
+    .card{
+        background-color: transparent;
+        align-items: center;
+        border: none;
+        max-width: 80vh;
+        a{
+            color: white;
+            text-decoration: none;
+            background-color: rgba(80, 80, 80, 0.3);
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+    }
+}
 
+
+.body{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Three columns */
+    padding: 2% 10%;
+    text-align: center;
+    gap: 20px;
+    .card{
+        border-radius: 10px;
+        img{
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        p{
+            padding: 1%;
+        }
+    }
+}
 
 /* Styles for the directory page */
 .directorio{
@@ -34,7 +88,7 @@
     display: grid;
     grid-template-columns: auto auto auto auto auto; /* Three columns */
     grid-auto-rows: 1fr;
-    gap: 10px;
+    gap: 15px;
     padding: 10px;
     justify-items: center;
     align-items: center;
@@ -79,3 +133,22 @@
     
 }
 
+.power{
+    background-color: aliceblue;
+}
+
+
+@media screen and (max-width: 768px) {
+    .hero {
+        flex-direction: column; /* Stack elements vertically on smaller screens */
+        align-items: center; /* Center align items */
+    }
+    
+    .body {
+        grid-template-columns: 1fr; /* Single column layout on smaller screens */
+    }
+    .card {
+        margin-bottom: 20px; /* Add spacing between cards */
+    }
+    
+}

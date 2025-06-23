@@ -12,10 +12,11 @@
         <div id="searchResultsContainer" class="directorio">
             @foreach ($users as $item)
                 <div class="card_directorio">
-                    <div class="user-card" data-search="{{ strtolower($item->name . ' ' . $item->last_name . ' ' . $item->email . ' ' . $item->ext) }}">
+                    <div class="user-card" data-search="{{ strtolower($item->name . ' ' . $item->last_name . ' ' . $item->email . ' ' . $item->ext . ' ' . $item->area) }}">
                         {{ $item->name }} {{ $item->last_name }}<br>
                         {{ $item->email }}<br>
                         {{ $item->ext }}<br>
+                        {{ $item->area }}<br>
                     </div>
                 </div>
             @endforeach
