@@ -32,6 +32,10 @@ Route::get('/Revista', function () {
     return view('picoteando');
 })->middleware(['auth', 'verified'])->name('picoteando');
 
+Route::get('/Capacitaciones', function () {
+    return view('capacitaciones');
+})->middleware(['auth', 'verified'])->name('capacitaciones');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -39,3 +43,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/Presupuestos', function () {
+    return view('emailPresup');
+})->middleware(['auth', 'verified'])->name('presupuestos');

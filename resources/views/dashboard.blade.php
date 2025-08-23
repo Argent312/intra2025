@@ -28,7 +28,7 @@
     <div class="body">
         <div class="card">
             <img src="imagenes/train.jpg" alt="">
-           <a href="#"><p>Capacitaciones</p></a>
+           <a href="{{ route('capacitaciones') }}"><p>Capacitaciones</p></a>
         </div>
         <div class="card">
             <img src="imagenes/event.jpeg" alt="">
@@ -39,4 +39,7 @@
             <a href="#"><p>Proximos</p></a>
         </div>
     </div>
+
+
+    
 </x-app-layout>
