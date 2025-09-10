@@ -37,6 +37,9 @@
                             <x-responsive-nav-link :href="route('comedor')" target="_blank" :active="request()->routeIs('opcion2')">
                                 {{ __('Comedor') }}
                             </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('reuniones')" :active="request()->routeIs('opcion3')">
+                                {{ __('Mis Reuniones') }}
+                            </x-responsive-nav-link>
                         </div>
                     </div>
 

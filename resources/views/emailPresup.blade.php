@@ -1,8 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
     </x-slot>
-    <form action="http://localhost:5678/webhook-test/fd1dd49a-a8a1-4c2b-882f-b9e0654a3f66" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('mailPresup') }}" method="POST" enctype="multipart/form-data">
+        @csrf
         <div class="presup mb-3">
+            <label for="frutas">Cargo:</label>
+                <select id="cargo" name="cargo">
+                    <option value="Urbanizacion">Urbanizacion</option>
+                    <option value="Vivienda">Vivienda</option>
+                </select>
+            <br><br>
             <label for="formFile" class="form-label">Selecciona tu archivo Excel:</label>
             @csrf
             <input class="" type="file" id="formFile" name="miArchivo">

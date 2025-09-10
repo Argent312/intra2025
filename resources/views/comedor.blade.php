@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Reserva de Comedor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -18,7 +19,7 @@
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">Calendario de Reserva de Sala de Juntas</h2>
+        <h2 class="text-center mb-4">Calendario de Reserva de Comedor</h2>
         <div id="calendar"></div>
     </div>
 
@@ -77,14 +78,14 @@
                 slotMaxTime: '20:00:00', // Horario de fin del día (6 PM)
                 businessHours: { // Define horas de trabajo si quieres restringir la selección
                     daysOfWeek: [1, 2, 3, 4, 5], // Lunes a Viernes
-                    startTime: '08:00',
-                    endTime: '18:00'
+                    
+                    timeZone: 'local',
                 },
                 selectable: true, // Permite al usuario seleccionar franjas de tiempo
                 selectMirror: true, // Muestra un "fantasma" de la selección
                 selectOverlap: false, // Evita la selección sobre eventos existentes
                 nowIndicator: true, // Muestra la hora actual
-                events: 'api.php', // Carga eventos desde tu API PHP
+                events: '/meetingsComedor', // Carga eventos desde tu API PHP
                 
                 select: function(info) {
                     // Abre el modal cuando el usuario selecciona un rango de tiempo
@@ -124,9 +125,10 @@
                     return;
                 }
 
-                fetch('api.php', {
+                fetch('/meetingsComedor', {
                     method: 'POST',
                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({

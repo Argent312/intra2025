@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Reserva de Sala de Juntas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -37,6 +38,9 @@
                     <label for="motivoReunion">Motivo de la Reunión:</label>
                     <textarea id="motivoReunion" class="form-control" rows="3" required></textarea>
 
+                    <label for="participantes">Participantes:</label>
+                    <textarea id="participantes" class="form-control" rows="3" required></textarea>
+
                     <input type="hidden" id="startDate" name="startDate">
                     <input type="hidden" id="endDate" name="endDate">
                 </div>
@@ -64,6 +68,7 @@
             var saveReservationBtn = document.getElementById('saveReservationBtn');
             var nombreReservanteInput = document.getElementById('nombreReservante');
             var motivoReunionInput = document.getElementById('motivoReunion');
+            var participantesInput = document.getElementById('participantes');
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'timeGridWeek', // Vista semanal con horas
@@ -77,14 +82,14 @@
                 slotMaxTime: '20:00:00', // Horario de fin del día (6 PM)
                 businessHours: { // Define horas de trabajo si quieres restringir la selección
                     daysOfWeek: [1, 2, 3, 4, 5], // Lunes a Viernes
-                    startTime: '08:00',
-                    endTime: '18:00'
+                    
+                    timeZone: 'local',
                 },
                 selectable: true, // Permite al usuario seleccionar franjas de tiempo
                 selectMirror: true, // Muestra un "fantasma" de la selección
                 selectOverlap: false, // Evita la selección sobre eventos existentes
                 nowIndicator: true, // Muestra la hora actual
-                events: 'api.php', // Carga eventos desde tu API PHP
+                events: '/meetings', // Carga eventos desde tu API PHP
                 
                 select: function(info) {
                     // Abre el modal cuando el usuario selecciona un rango de tiempo
@@ -97,13 +102,14 @@
                     
                     nombreReservanteInput.value = ''; // Limpiar campos
                     motivoReunionInput.value = '';
+                    participantesInput.value = '';
 
                     reservationModal.show();
                 },
                 eventClick: function(info) {
                     // Puedes añadir lógica para ver detalles del evento o borrarlo
                     // Por ahora, solo muestra una alerta básica
-                    alert('Reunión: ' + info.event.title + '\nDesde: ' + info.event.start.toLocaleString() + '\nHasta: ' + info.event.end.toLocaleString());
+                    alert(info.event.title + '\nDesde: ' + info.event.start.toLocaleString() + '\nHasta: ' + info.event.end.toLocaleString());
                 },
                 eventDidMount: function(info) {
                     // Puedes personalizar la apariencia de los eventos aquí si lo deseas
@@ -116,6 +122,7 @@
             saveReservationBtn.addEventListener('click', function() {
                 const nombre = nombreReservanteInput.value.trim();
                 const motivo = motivoReunionInput.value.trim();
+                const participantes = participantesInput.value.trim();
                 const startDate = startDateInput.value;
                 const endDate = endDateInput.value;
 
@@ -124,14 +131,16 @@
                     return;
                 }
 
-                fetch('api.php', {
+                fetch('/meetings', {
                     method: 'POST',
                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         nombre_reservante: nombre,
                         motivo_reunion: motivo,
+                        participantes: participantes,
                         fecha_inicio: startDate,
                         fecha_fin: endDate
                     })

@@ -218,6 +218,86 @@
     
 }
 
+
+/* Styles for the SGC Page */
+.sgc_interno {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Space between cards */    
+    padding: 20px;
+
+    .background-oscuro {
+        background-image: url("../imagenes/SGC/construccion.webp");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.6); /* Oscurece la imagen */
+        height: 100vh;
+        position: relative;
+    }
+    .background-rh {
+        background-image: url("../imagenes/SGC/rh.webp");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.6); /* Oscurece la imagen */
+        height: 100vh;
+        position: relative;
+    }
+
+    .background-adfi {
+        background-image: url("../imagenes/SGC/adfi.webp");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.6); /* Oscurece la imagen */
+        height: 100vh;
+        position: relative;
+    }
+    .background-comercial {
+        background-image: url("../imagenes/SGC/comercial.webp");
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.6); /* Oscurece la imagen */
+        height: 100vh;
+        position: relative;
+    }
+
+    .contenido-texto {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        text-align: center;
+        font-size: 2rem;
+        filter: brightness(1); /* Restaura brillo del texto */
+    }
+
+
+    .roles{
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto auto;
+        gap: 20px; /* Space between cards */
+        
+        
+        .roles_cards{
+            background-color: #1d4ed8;
+            place-items: center;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .user_card{
+            
+            padding: 10px;
+            margin-bottom: -30%;
+            a{
+                font-size: larger;
+                color: white;
+            }
+            
+        }
+    }
+}
+
 /* Styles for the Presupestos Section */
 .presup{
     display: flex;
