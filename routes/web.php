@@ -4,10 +4,19 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\n8nController;
 use App\Http\Controllers\Api\MeetingController;
+use App\Http\Controllers\SgcController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+//Setting admin sections
+Route::get('/Admin', function () {
+    return view('admin');
+})->middleware(['auth', 'verified'])->name('admin');
+
+Route::get('/AdminSGC', [SgcController::class, 'list'])->middleware(['auth', 'verified'])->name('adminSGC');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -23,37 +32,7 @@ Route::get('/SGC', function () {
     return view('sgc');
 })->middleware(['auth', 'verified'])->name('sgc');
 
-Route::get('/SGC/Construccion', function () {
-    return view('/SGC/construccion');
-})->middleware(['auth', 'verified'])->name('sgc.construccion');
 
-Route::get('/SGC/RH', function () {
-    return view('/SGC/rh');
-})->middleware(['auth', 'verified'])->name('sgc.rh');
-
-Route::get('/SGC/ADFI', function () {
-    return view('/SGC/adfi');
-})->middleware(['auth', 'verified'])->name('sgc.adfi');
-
-Route::get('/SGC/Comercial', function () {
-    return view('/SGC/comercial');
-})->middleware(['auth', 'verified'])->name('sgc.comercial');
-
-Route::get('/SGC/Proyectos', function () {
-    return view('/SGC/proyectos');
-})->middleware(['auth', 'verified'])->name('sgc.proyectos');
-
-Route::get('/SGC/RI', function () {
-    return view('/SGC/ri');
-})->middleware(['auth', 'verified'])->name('sgc.ri');
-
-Route::get('/SGC/Presupuestos', function () {
-    return view('/SGC/presupuestos');
-})->middleware(['auth', 'verified'])->name('sgc.presupuestos');
-
-Route::get('/SGC/Juridico', function () {
-    return view('/SGC/juridico');
-})->middleware(['auth', 'verified'])->name('sgc.juridico');
 
 
 Route::get('/comedor', function () {
