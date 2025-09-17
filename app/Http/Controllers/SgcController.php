@@ -8,14 +8,27 @@ use App\Models\proceso;
 use App\Models\direction;
 use App\Models\area;
 use App\Models\union;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class SgcController extends Controller
 {
+    public function admin()
+    {
+        if (Auth::user()->administrator !== 1) {
+            abort(403, 'Acceso denegado');
+        }
+        return view('admin');
+    }
     public function list()
     {
+        if (Auth::user()->administrator !== 1) {
+            abort(403, 'Acceso denegado');
+        }
+
         $directions = direction::all();
         $areas = area::orderBy('directions_id', 'asc')->get();
         $roles = role::orderBy('area_id', 'asc')->get();
@@ -24,4 +37,190 @@ class SgcController extends Controller
     return view('sgcAdmin', compact('directions', 'areas', 'roles'));
 
     }
+
+    public function all()
+    {
+        if (Auth::user()->administrator !== 1) {
+            abort(403, 'Acceso denegado');
+        }
+        $procesos = proceso::all();
+        return view('sgcAll', compact('procesos'));
+    }
+
+    public function guardarDatos(Request $request)
+    {
+        $proceso = new proceso();
+
+        if ($request->hasFile('documento')) {
+        $archivo = $request->file('documento');
+
+        // Opcional: generar nombre único
+        $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+
+        // Guardar en storage/app/public/documentos
+        $ruta = $archivo->storeAs('public/documentos', $nombreArchivo);
+
+        // Guardar la ruta en la base de datos (sin 'public/')
+        $proceso->ruta = str_replace('public', 'storage/public', $ruta);
+    }
+
+
+        $proceso->nombre_proceso = $request->input('nombre');
+        $proceso->codigo = $request->input('codigo');
+        $proceso->version = $request->input('version');
+        $proceso->estado = $request->input('estado');
+        $proceso->tipo = $request->input('tipo');
+        $proceso->fecha_version = $request->input('fecha_version');
+        $proceso->save();
+
+
+
+        $rolesSeleccionados = $request->input('roles', []); // array de IDs
+        $proceso->roles()->attach($rolesSeleccionados);
+
+        $areasSeleccionados = $request->input('areas', []); // array de IDs
+        $proceso->areas()->attach($areasSeleccionados);
+
+        $directionsSeleccionados = $request->input('direcciones', []); // array de IDs
+        $proceso->directions()->attach($directionsSeleccionados);
+
+        return redirect()->route('adminSGC')->with('success', 'Datos guardados correctamente.');
+    }
+
+
+    public function showProcedimientos(Request $request)
+    {
+        if (Auth::user()->administrator !== 1) {
+            abort(403, 'Acceso denegado');
+        }
+        $user = Auth::user();
+        $tipoFiltro = $request->input('tipo'); // Ej: 'Manual', 'Política', etc.
+
+        $unionRecords = collect();
+
+        if ($user->id_directions) {
+            $unionRecords = DB::table('unions')
+                ->where('directions_id', $user->id_directions)
+                ->pluck('procesos_id');
+        }
+
+        if ($user->id_areas) {
+            $unionRecords = DB::table('unions')
+                ->where('areas_id', $user->id_areas)
+                ->pluck('procesos_id');
+        }
+
+        if ($user->id_roles) {
+            $unionRecords = DB::table('unions')
+                ->where('roles_id', $user->id_roles)
+                ->pluck('id_procedimiento');
+        }
+
+        $query = DB::table('procesos')->whereIn('id', $unionRecords);
+
+        if ($tipoFiltro) {
+            $query->where('tipo', $tipoFiltro);
+        }
+
+        $procedimientos = $query->get();
+
+        return view('sgc', compact('procedimientos', 'tipoFiltro'));
+    }
+
+
+    public function edit($id)
+    {
+        $proceso = Proceso::findOrFail($id);
+
+    $relaciones = DB::table('unions')
+        ->where('procesos_id', $proceso->id)
+        ->get();
+
+    $idsDirecciones = $relaciones->where('unionable_type', 'App\\Models\\Direction')->pluck('unionable_id')->toArray();
+    $idsAreas = $relaciones->where('unionable_type', 'App\\Models\\Area')->pluck('unionable_id')->toArray();
+    $idsRoles = $relaciones->where('unionable_type', 'App\\Models\\Role')->pluck('unionable_id')->toArray();
+
+    $directions = Direction::all();
+    $areas = Area::all();
+    $roles = Role::all();
+
+    return view('sgcEdit', compact('proceso', 'directions', 'areas', 'roles', 'idsDirecciones', 'idsAreas', 'idsRoles'));
+
+
+    }
+
+    
+
+
+    public function update(Request $request, $id)
+{
+    $proceso = Proceso::findOrFail($id);
+
+    // Validación básica
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'version' => 'required|string|max:50',
+        'codigo' => 'required|string|max:50',
+        'fecha_version' => 'required|date',
+        'tipo' => 'required|in:Procedimiento,Politica,Formato',
+        'estado' => 'required|in:Piloto,Autorizado',
+        'documento' => 'nullable|file|mimes:pdf|max:20480', // 20MB
+    ]);
+
+    // Actualizar campos
+    $proceso->update([
+        'nombre_proceso' => $request->nombre,
+        'version' => $request->version,
+        'codigo' => $request->codigo,
+        'fecha_version' => $request->fecha_version,
+        'tipo' => $request->tipo,
+        'estado' => $request->estado,
+    ]);
+
+    // Reemplazar documento si se sube uno nuevo
+    if ($request->hasFile('documento')) {
+
+        
+        if ($proceso->ruta) {
+            // Convertir la ruta pública a ruta interna
+            $rutaInterna = str_replace('storage/', '', $proceso->ruta);
+
+            if (Storage::disk('public')->exists($rutaInterna)) {
+                Storage::disk('public')->delete($rutaInterna);
+            }
+        }
+
+        $path = $request->file('documento')->store('documentos', 'public');
+        $proceso->ruta = 'storage/' . $path;
+        $proceso->save();
+    }
+
+    // Eliminar relaciones anteriores en tabla unions
+    DB::table('unions')->where('procesos_id', $proceso->id)->delete();
+
+    // Insertar nuevas relaciones
+    foreach ($request->input('direcciones', []) as $id) {
+        DB::table('unions')->insert([
+            'procesos_id' => $proceso->id,
+            'directions_id' => $id,
+        ]);
+    }
+
+    foreach ($request->input('areas', []) as $id) {
+        DB::table('unions')->insert([
+            'procesos_id' => $proceso->id,
+            'area_id' => $id,
+        ]);
+    }
+
+    foreach ($request->input('roles', []) as $id) {
+        DB::table('unions')->insert([
+            'procesos_id' => $proceso->id,
+            'roles_id' => $id,
+        ]);
+    }
+
 }
+
+}
+

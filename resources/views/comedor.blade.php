@@ -32,11 +32,14 @@
                 </div>
                 <div class="modal-body">
                     <p>Horario seleccionado: <strong id="selectedTime"></strong></p>
-                    <label for="nombreReservante">Tu Nombre:</label>
-                    <input type="text" id="nombreReservante" class="form-control" required>
+                   
+                    <input type="hidden" id="nombreReservante" name="nombreReservante" class="form-control" required value="{{ Auth::user()->name }}" readonly>
 
                     <label for="motivoReunion">Motivo de la Reunión:</label>
                     <textarea id="motivoReunion" class="form-control" rows="3" required></textarea>
+
+                    <label for="participantes">Participantes:</label>
+                    <textarea id="participantes" class="form-control" rows="3" required></textarea>
 
                     <input type="hidden" id="startDate" name="startDate">
                     <input type="hidden" id="endDate" name="endDate">
@@ -64,6 +67,7 @@
             var endDateInput = document.getElementById('endDate');
             var saveReservationBtn = document.getElementById('saveReservationBtn');
             var nombreReservanteInput = document.getElementById('nombreReservante');
+            var participantesInput = document.getElementById('participantes');
             var motivoReunionInput = document.getElementById('motivoReunion');
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -95,9 +99,10 @@
                     selectedTimeSpan.textContent = `${start} a ${end}`;
                     startDateInput.value = info.startStr;
                     endDateInput.value = info.endStr;
-                    
-                    nombreReservanteInput.value = ''; // Limpiar campos
+
+                    nombreReservanteInput.value = '{{ Auth::user()->name }}'; // Limpiar campos
                     motivoReunionInput.value = '';
+                    participantesInput.value = '';
 
                     reservationModal.show();
                 },
@@ -117,6 +122,7 @@
             saveReservationBtn.addEventListener('click', function() {
                 const nombre = nombreReservanteInput.value.trim();
                 const motivo = motivoReunionInput.value.trim();
+                const participantes = participantesInput.value.trim();
                 const startDate = startDateInput.value;
                 const endDate = endDateInput.value;
 
@@ -134,6 +140,7 @@
                     body: JSON.stringify({
                         nombre_reservante: nombre,
                         motivo_reunion: motivo,
+                        participantes: participantes,
                         fecha_inicio: startDate,
                         fecha_fin: endDate
                     })

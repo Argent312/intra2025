@@ -11,6 +11,7 @@
                 </div>
 
                 <!-- Navigation Links -->
+                 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Inicio') }}
@@ -21,6 +22,8 @@
                     <x-nav-link :href="route('sgc')" :active="request()->routeIs('sgc')">
                         {{ __('SGC') }}
                     </x-nav-link>
+                    
+
                 
                     {{-- Dropdown en responsive --}}
                     <div x-data="{ open: false }" class="space-y-1 py-0 sm:py-0 space-x-2 relative z-50">
@@ -91,11 +94,11 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Perfil') }}
                         </x-dropdown-link>
-
-                        <x-dropdown-link :href="route('admin')">
-                            {{ __('Admin') }}
-                        </x-dropdown-link>
-
+                        @if(Auth::user()->administrator === 1)
+                            <x-dropdown-link :href="route('admin')">
+                                {{ __('Admin') }}
+                            </x-dropdown-link>
+                        @endif
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

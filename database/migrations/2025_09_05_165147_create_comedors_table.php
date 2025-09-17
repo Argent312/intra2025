@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_reservante');
             $table->string('motivo_reunion');
+            $table->string('participantes');
             // Usa dateTime en lugar de timestamp
             $table->dateTime('fecha_inicio'); 
             $table->dateTime('fecha_fin');    

@@ -5,6 +5,7 @@
         </h2>
     </x-slot>
     <div class="adminsgc">
+        <button class="send"><a href="{{ route('adminSGCAll') }}">Ver todos</a></button>
         <form action="/guardar-datos" method="POST" enctype="multipart/form-data" class="form-grid">
             @csrf
 
@@ -31,6 +32,12 @@
                     <option value="Procedimiento">Procedimiento</option>
                     <option value="Politica">Politica</option>
                     <option value="Formato">Formato</option>
+                </select>
+
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado" required>
+                    <option value="Piloto">Piloto</option>
+                    <option value="Autorizado">Autorizado</option>
                 </select>
 
                 <!-- Documento PDF -->

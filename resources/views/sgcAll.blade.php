@@ -2,19 +2,8 @@
     <x-slot name="header">
         
     </x-slot>
-
     <div class="adminsgc">
-        <form method="GET" action="{{ route('sgc') }}" class="mb-4">
-            <label for="tipo" class="mr-2">Filtrar por tipo:</label>
-            <select name="tipo" id="tipo" class="border rounded px-2 py-1">
-                <option value="Procedimiento" {{ request('tipo') == 'Procedimiento' ? 'selected' : '' }}>Procedimiento</option>
-                <option value="Politica" {{ request('tipo') == 'Politica' ? 'selected' : '' }}>Política</option>
-                <option value="Formato" {{ request('tipo') == 'Formato' ? 'selected' : '' }}>Formato</option>
-            </select>
-            <button type="submit" class="send">Filtrar</button>
-        </form>
-
-        
+        <button class="send"><a href="/AdminSGC">Ir a Administrador SGC</a></button>
         <div class="allsgc">
             <table>
                 <thead>
@@ -26,10 +15,11 @@
                         <th>Tipo</th>
                         <th>Estado</th>
                         <th>Documento</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($procedimientos as $item)
+                    @foreach($procesos as $item)
                     <tr>
                         <td>{{ $item->nombre_proceso }}</td>
                         <td>{{ $item->version }}</td>
@@ -38,6 +28,7 @@
                         <td>{{ $item->tipo }}</td>
                         <td>{{ $item->estado }}</td>
                         <td><a href="{{ url($item->ruta) }}" target="_blank">Ver Documento</a></td>
+                        <td><a href="{{ route('editarProceso', $item->id) }}">Edit</a></td>
                     </tr>
                     @endforeach
                 </tbody>

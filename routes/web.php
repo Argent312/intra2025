@@ -12,11 +12,16 @@ Route::get('/', function () {
 
 
 //Setting admin sections
-Route::get('/Admin', function () {
-    return view('admin');
-})->middleware(['auth', 'verified'])->name('admin');
+Route::get('/Admin', [SgcController::class, 'admin'])->middleware(['auth', 'verified'])->name('admin');
+
 
 Route::get('/AdminSGC', [SgcController::class, 'list'])->middleware(['auth', 'verified'])->name('adminSGC');
+Route::post('/guardar-datos', [SgcController::class, 'guardarDatos'])->middleware(['auth', 'verified'])->name('guardarDatos');
+Route::get('/AdminSGCAll', [SgcController::class, 'all'])->middleware(['auth', 'verified'])->name('adminSGCAll');
+Route::get('/procesos/{id}/edit', [SgcController::class, 'edit'])->name('editarProceso');
+Route::put('/procesos/{id}', [SgcController::class, 'update'])->name('procesos.update');
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -27,14 +32,11 @@ Route::get('/dashboard', function () {
 
 
 Route::get('/directorio', [ProfileController::class, 'directorio'])->middleware(['auth', 'verified'])->name('directorio');
-
-Route::get('/SGC', function () {
-    return view('sgc');
-})->middleware(['auth', 'verified'])->name('sgc');
+Route::get('/SGC', [SgcController::class, 'showProcedimientos'])->middleware(['auth', 'verified'])->name('sgc');
 
 
 
-
+//Calendario de reservas de comedor
 Route::get('/comedor', function () {
     return view('comedor');
 })->middleware(['auth', 'verified'])->name('comedor');
@@ -51,7 +53,16 @@ Route::get('/meetings', [MeetingController::class, 'index'])->middleware(['auth'
 Route::post('/meetings', [MeetingController::class, 'store'])->middleware(['auth', 'verified']);
 
 Route::get('/Mis Reuniones', [MeetingController::class, 'reuniones'])->middleware(['auth', 'verified'])->name('reuniones');
+//Rutas del comedor
+Route::get('/reuniones/{id}/edit', [MeetingController::class, 'edit'])->name('reuniones.edit');
+Route::put('/reuniones/{id}', [MeetingController::class, 'update'])->name('reuniones.update');
+Route::delete('/reuniones/{id}', [MeetingController::class, 'destroy'])->name('reuniones.destroy');
+//Rutas de la sala
+Route::get('/reuniones/sala/{id}/edit', [MeetingController::class, 'editSala'])->name('reuniones.sala.edit');
+Route::put('/reuniones/sala/{id}', [MeetingController::class, 'updateSala'])->name('reuniones.sala.update');
+Route::delete('/reuniones/sala/{id}', [MeetingController::class, 'destroySala'])->name('reuniones.sala.destroy');
 
+//Pages Pruebas
 Route::get('/Revista', function () {
     return view('picoteando');
 })->middleware(['auth', 'verified'])->name('picoteando');

@@ -32,8 +32,9 @@
                 </div>
                 <div class="modal-body">
                     <p>Horario seleccionado: <strong id="selectedTime"></strong></p>
-                    <label for="nombreReservante">Tu Nombre:</label>
-                    <input type="text" id="nombreReservante" class="form-control" required>
+                    
+                    <input type="hidden" id="nombreReservante" name="nombreReservante" class="form-control" required value="{{ Auth::user()->name }}" readonly>
+
 
                     <label for="motivoReunion">Motivo de la Reunión:</label>
                     <textarea id="motivoReunion" class="form-control" rows="3" required></textarea>
@@ -100,7 +101,7 @@
                     startDateInput.value = info.startStr;
                     endDateInput.value = info.endStr;
                     
-                    nombreReservanteInput.value = ''; // Limpiar campos
+                    nombreReservanteInput.value = '{{ Auth::user()->name }}'; // Limpiar campos
                     motivoReunionInput.value = '';
                     participantesInput.value = '';
 
