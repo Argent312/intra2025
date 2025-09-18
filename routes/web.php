@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\n8nController;
 use App\Http\Controllers\Api\MeetingController;
 use App\Http\Controllers\SgcController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,7 +34,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/directorio', [ProfileController::class, 'directorio'])->middleware(['auth', 'verified'])->name('directorio');
 Route::get('/SGC', [SgcController::class, 'showProcedimientos'])->middleware(['auth', 'verified'])->name('sgc');
-
+Route::get('/Tableros', [HomeController::class, 'tableros'])->middleware(['auth', 'verified'])->name('tableros');
 
 
 //Calendario de reservas de comedor
@@ -77,6 +78,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+//Pagina para dar de alta usuarios (solo admin)
+Route::get('/alta', [HomeController::class, 'usuarioalta'])->name('usuarioalta');
 
 require __DIR__.'/auth.php';
 

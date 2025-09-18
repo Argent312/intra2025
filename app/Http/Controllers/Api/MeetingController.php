@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class MeetingController extends Controller
 {
     // GET /api/meetings -> FullCalendar events
@@ -177,9 +178,11 @@ class MeetingController extends Controller
     }
 
     public function reuniones()
-    {
-        $reuniones = sala::orderBy('fecha_inicio')->where('fecha_inicio', '>=', Carbon::today())->get();
-        $reunionesC = comedor::orderBy('fecha_inicio')->where('fecha_inicio', '>=', Carbon::today())->get();
+    {   
+        $nombre = Auth::user()->name;
+
+        $reuniones = sala::orderBy('fecha_inicio')->where('fecha_inicio', '>=', Carbon::today())->where('nombre_reservante', $nombre)->get();
+        $reunionesC = comedor::orderBy('fecha_inicio')->where('fecha_inicio', '>=', Carbon::today())->where('nombre_reservante', $nombre)->get();
         return view('reuniones', compact('reuniones', 'reunionesC'));
     }
 

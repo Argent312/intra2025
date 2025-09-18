@@ -46,33 +46,9 @@
                         </div>
                     </div>
 
-
-                    {{-- Dropdown en responsive --}}
-                    <div x-data="{ open: false }" class="space-y-1 py-0 sm:py-0 space-x-2 relative z-50">
-                        {{-- Botón para abrir el dropdown --}}
-                            <button @click="open = !open"
-                                class="w-full text-left px-2 py-4 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none transition">
-                                {{ __('Tableros BI') }}
-                            </button>
-
-                        <div x-show="open" class="power space-y-1 pl-4" x-cloak>
-                            <x-responsive-nav-link href="https://app.powerbi.com/links/WbQQljIF9B?ctid=c9773dbb-728b-4a0c-bc43-bc181a28a289&pbi_source=linkShare" target="_blank" :active="request()->routeIs('opcion1')">
-                                {{ __('Analitico de Vencimientos') }}
-                            </x-responsive-nav-link>
-                            <x-responsive-nav-link href="https://app.powerbi.com/links/ClCv1pzoeE?ctid=c9773dbb-728b-4a0c-bc43-bc181a28a289&pbi_source=linkShare" target="_blank" :active="request()->routeIs('opcion2')">
-                                {{ __('Presupuesto Administrativo') }}
-                            </x-responsive-nav-link>
-                            <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiMzkwY2JkN2YtMzRkNy00ZDVkLWJhNzMtNzdhMzIxZWU3NTUwIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9" target="_blank" :active="request()->routeIs('opcion2')">
-                                {{ __('Valor Proyecto') }}
-                            </x-responsive-nav-link>
-                            <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiNTZkMzFjNzMtOWE0MC00N2FiLWFiNWYtNDAxNDgyZTQ0YWEyIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9 " target="_blank" :active="request()->routeIs('opcion2')">
-                                {{ __('Cobranza 2025') }}
-                            </x-responsive-nav-link>
-                            <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiZDA1OTIyOWItOTBkYy00YzJmLWEzMzUtMTU0OGJjYjZhMDQwIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9 " target="_blank" :active="request()->routeIs('opcion2')">
-                                {{ __('Presupuesto MKT') }}
-                            </x-responsive-nav-link>
-                        </div>
-                    </div>
+                    <x-nav-link :href="route('tableros')" :active="request()->routeIs('sgc')">
+                        {{ __('Tableros BI') }}
+                    </x-nav-link>
                 </div>
             </div>
             <!-- Settings Dropdown -->
@@ -160,32 +136,6 @@
                         </x-responsive-nav-link>
                     </div>
                 </div>
-        {{-- Dropdown en responsive --}}
-            <div x-data="{ open: false }" class="space-y-1 py-2 sm:py-0 space-x-8 relative z-50">
-                {{-- Botón para abrir el dropdown --}}
-                    <button @click="open = !open"
-                        class="w-full text-left px-4 py-4 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none transition">
-                        {{ __('Tableros BI') }}
-                    </button>
-
-                <div x-show="open" class="power space-y-1 pl-4" x-cloak>
-                    <x-responsive-nav-link href="https://app.powerbi.com/links/WbQQljIF9B?ctid=c9773dbb-728b-4a0c-bc43-bc181a28a289&pbi_source=linkShare" target="_blank" :active="request()->routeIs('opcion1')">
-                        {{ __('Analitico de Vencimientos') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link href="https://app.powerbi.com/links/ClCv1pzoeE?ctid=c9773dbb-728b-4a0c-bc43-bc181a28a289&pbi_source=linkShare" target="_blank" :active="request()->routeIs('opcion2')">
-                        {{ __('Presupuesto Administrativo') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiMzkwY2JkN2YtMzRkNy00ZDVkLWJhNzMtNzdhMzIxZWU3NTUwIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9" target="_blank" :active="request()->routeIs('opcion2')">
-                        {{ __('Valor Proyecto') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiNTZkMzFjNzMtOWE0MC00N2FiLWFiNWYtNDAxNDgyZTQ0YWEyIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9 " target="_blank" :active="request()->routeIs('opcion2')">
-                        {{ __('Cobranza 2025') }}
-                    </x-responsive-nav-link>
-                    <x-responsive-nav-link href="https://app.powerbi.com/view?r=eyJrIjoiZDA1OTIyOWItOTBkYy00YzJmLWEzMzUtMTU0OGJjYjZhMDQwIiwidCI6ImM5NzczZGJiLTcyOGItNGEwYy1iYzQzLWJjMTgxYTI4YTI4OSJ9 " target="_blank" :active="request()->routeIs('opcion2')">
-                        {{ __('Presupuesto MKT') }}
-                    </x-responsive-nav-link>
-                </div>
-            </div>
         </div>
     </div>
 
