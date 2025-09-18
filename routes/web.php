@@ -21,6 +21,7 @@ Route::post('/guardar-datos', [SgcController::class, 'guardarDatos'])->middlewar
 Route::get('/AdminSGCAll', [SgcController::class, 'all'])->middleware(['auth', 'verified'])->name('adminSGCAll');
 Route::get('/procesos/{id}/edit', [SgcController::class, 'edit'])->name('editarProceso');
 Route::put('/procesos/{id}', [SgcController::class, 'update'])->name('procesos.update');
+Route::delete('/procesos/{id}', [SgcController::class, 'destroy'])->name('eliminarProceso');
 
 
 
@@ -53,6 +54,13 @@ Route::get('/sala', function () {
 Route::get('/meetings', [MeetingController::class, 'index'])->middleware(['auth', 'verified']);
 Route::post('/meetings', [MeetingController::class, 'store'])->middleware(['auth', 'verified']);
 
+//Calendario de reservas de titulacion
+Route::get('/titulacion', function () {
+    return view('titulacion');
+})->middleware(['auth', 'verified'])->name('titulacion');
+Route::get('/meetingsTitulacion', [MeetingController::class, 'indextitulacion'])->middleware(['auth', 'verified']);
+Route::post('/meetingsTitulacion', [MeetingController::class, 'storetitulacion'])->middleware(['auth', 'verified']);
+
 Route::get('/Mis Reuniones', [MeetingController::class, 'reuniones'])->middleware(['auth', 'verified'])->name('reuniones');
 //Rutas del comedor
 Route::get('/reuniones/{id}/edit', [MeetingController::class, 'edit'])->name('reuniones.edit');
@@ -62,6 +70,10 @@ Route::delete('/reuniones/{id}', [MeetingController::class, 'destroy'])->name('r
 Route::get('/reuniones/sala/{id}/edit', [MeetingController::class, 'editSala'])->name('reuniones.sala.edit');
 Route::put('/reuniones/sala/{id}', [MeetingController::class, 'updateSala'])->name('reuniones.sala.update');
 Route::delete('/reuniones/sala/{id}', [MeetingController::class, 'destroySala'])->name('reuniones.sala.destroy');
+//Rutas de la titulacion
+Route::get('/reuniones/titulacion/{id}/edit', [MeetingController::class, 'editTitulacion'])->name('reuniones.titulacion.edit');
+Route::put('/reuniones/titulacion/{id}', [MeetingController::class, 'updateTitulacion'])->name('reuniones.titulacion.update');
+Route::delete('/reuniones/titulacion/{id}', [MeetingController::class, 'destroyTitulacion'])->name('reuniones.titulacion.destroy');
 
 //Pages Pruebas
 Route::get('/Revista', function () {

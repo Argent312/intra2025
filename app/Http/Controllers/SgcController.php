@@ -23,6 +23,8 @@ class SgcController extends Controller
         }
         return view('admin');
     }
+
+
     public function list()
     {
         if (Auth::user()->administrator !== 1) {
@@ -38,6 +40,8 @@ class SgcController extends Controller
 
     }
 
+
+
     public function all()
     {
         if (Auth::user()->administrator !== 1) {
@@ -46,6 +50,8 @@ class SgcController extends Controller
         $procesos = proceso::all();
         return view('sgcAll', compact('procesos'));
     }
+
+
 
     public function guardarDatos(Request $request)
     {
@@ -219,8 +225,31 @@ class SgcController extends Controller
             'roles_id' => $id,
         ]);
     }
+    return redirect()->route('adminSGCAll')->with('success', 'Proceso eliminado correctamente.');
 
 }
 
+
+public function destroy($id)
+{
+    $proceso = Proceso::findOrFail($id);
+
+    // Eliminar archivo asociado si existe
+    if ($proceso->ruta) {
+        $rutaInterna = str_replace('storage/', '', $proceso->ruta);
+        if (Storage::disk('public')->exists($rutaInterna)) {
+            Storage::disk('public')->delete($rutaInterna);
+        }
+    }
+
+    // Eliminar relaciones en tabla unions
+    DB::table('unions')->where('procesos_id', $proceso->id)->delete();
+
+    // Eliminar el proceso
+    $proceso->delete();
+
+    return redirect()->route('adminSGCAll')->with('success', 'Proceso eliminado correctamente.');
+
+}
 }
 

@@ -28,7 +28,15 @@
                         <td>{{ $item->tipo }}</td>
                         <td>{{ $item->estado }}</td>
                         <td><a href="{{ url($item->ruta) }}" target="_blank">Ver Documento</a></td>
-                        <td><a href="{{ route('editarProceso', $item->id) }}">Edit</a></td>
+                        <td>
+                            <a href="{{ route('editarProceso', $item->id) }}" class="btn btn-primary mb-2">Edit</a>
+                            <form action="{{ route('eliminarProceso', $item->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este proceso?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
