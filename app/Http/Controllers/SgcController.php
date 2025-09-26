@@ -96,9 +96,7 @@ class SgcController extends Controller
 
     public function showProcedimientos(Request $request)
     {
-        if (Auth::user()->administrator !== 1) {
-            abort(403, 'Acceso denegado');
-        }
+        
         $user = Auth::user();
         $tipoFiltro = $request->input('tipo'); // Ej: 'Manual', 'Política', etc.
 

@@ -24,6 +24,19 @@
         </div>
     </div>
 
+    <div class="accesos">
+        <a href="https://carpin-corp.monday.com/?slug=carpin-corp" target="_blank">
+            <img class="logos" src="imagenes/logomonday.webp" alt="Monday">
+        </a>
+        <a href="https://desarrolladoracarpin.bizneohr.com/" target="_blank">
+            <img class="logos" src="imagenes/bizneo.jpg" alt="Bizneo">
+        </a>
+        <a href="https://spa.checklistfacil.com.br/login?lang=es-es" target="_blank">
+            <img class="logos" src="imagenes/checklist.jpeg" alt="Checklist">
+        </a>
+    </div>
+    
+
 
     <div class="body">
         <div class="card">
