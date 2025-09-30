@@ -15,7 +15,7 @@
                     </div>
                     <div class="carousel-item">
                         <div class="card">
-                            <img src="imagenes/hero/expo.jpg" alt="">
+                            <img src="imagenes/hero/redes.webp" alt="">
                             <a href="#">Ver mas</a>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
     </div>
     
 
-
+    <!-- Cards de capacitaciones, eventos y proximos 
     <div class="body">
         <div class="card">
             <img src="imagenes/train.jpg" alt="">
@@ -52,7 +52,7 @@
             <a href="#"><p>Proximos</p></a>
         </div>
     </div>
-
+    -->
 
     
 </x-app-layout>
