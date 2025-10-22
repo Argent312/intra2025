@@ -10,9 +10,15 @@ use App\Models\area;
 use App\Models\union;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use App\Services\PdfTextExtractor;
+use App\Services\TextPostProcessor;
+use App\Services\DocIndexWriter;
+use App\Jobs\NotifyN8nIndexJob; 
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
+use App\Jobs\ReindexProcesoJob;
 
 class SgcController extends Controller
 {
@@ -68,6 +74,7 @@ class SgcController extends Controller
 
         // Guardar la ruta en la base de datos (sin 'public/')
         $proceso->ruta = str_replace('public', 'storage/public', $ruta);
+        $subioPdf = true;
     }
 
 
@@ -79,8 +86,7 @@ class SgcController extends Controller
         $proceso->fecha_version = $request->input('fecha_version');
         $proceso->save();
 
-
-
+        
         $rolesSeleccionados = $request->input('roles', []); // array de IDs
         $proceso->roles()->attach($rolesSeleccionados);
 
@@ -89,6 +95,14 @@ class SgcController extends Controller
 
         $directionsSeleccionados = $request->input('direcciones', []); // array de IDs
         $proceso->directions()->attach($directionsSeleccionados);
+
+        
+try {
+    // Solo encola el indexado
+    ReindexProcesoJob::dispatch($proceso->id)->onQueue('index');
+} catch (\Throwable $e) {
+    Log::error('[SGC] Error al encolar index', ['e' => $e->getMessage()]);
+}
 
         return redirect()->route('adminSGC')->with('success', 'Datos guardados correctamente.');
     }
@@ -159,7 +173,9 @@ class SgcController extends Controller
     public function update(Request $request, $id)
 {
     $proceso = Proceso::findOrFail($id);
-
+    // Detectar cambios para decidir reindex
+    $versionAnterior = $proceso->version;
+    $pdfCambiado = false;
     // Validación básica
     $request->validate([
         'nombre' => 'required|string|max:255',
@@ -198,31 +214,29 @@ class SgcController extends Controller
         $proceso->ruta = 'storage/' . $path;
         $proceso->save();
     }
-
-    // Eliminar relaciones anteriores en tabla unions
-    DB::table('unions')->where('procesos_id', $proceso->id)->delete();
-
-    // Insertar nuevas relaciones
-    foreach ($request->input('direcciones', []) as $id) {
-        DB::table('unions')->insert([
-            'procesos_id' => $proceso->id,
-            'directions_id' => $id,
-        ]);
+    Log::info('[SGC] Guardado OK, proceso_id='.$proceso->id.', version='. $proceso->version);
+    if ($request->hasFile('documento')) {
+        try {
+    // Solo encola el indexado
+    ReindexProcesoJob::dispatch($proceso->id)->onQueue('index');
+} catch (\Throwable $e) {
+    Log::error('[SGC] Error al encolar index', ['e' => $e->getMessage()]);
+}
     }
+    Log::info('[SGC] Encolando ReindexProcesoJob', ['proceso_id' => $proceso->id]);
+ReindexProcesoJob::dispatch($proceso->id)->onQueue('index');
+Log::info('[SGC] ReindexProcesoJob encolado', ['proceso_id' => $proceso->id]);
 
-    foreach ($request->input('areas', []) as $id) {
-        DB::table('unions')->insert([
-            'procesos_id' => $proceso->id,
-            'area_id' => $id,
-        ]);
-    }
-
-    foreach ($request->input('roles', []) as $id) {
-        DB::table('unions')->insert([
-            'procesos_id' => $proceso->id,
-            'roles_id' => $id,
-        ]);
-    }
+// (Opcional) notificación temprana a n8n SOLO PARA DIAGNÓSTICO:
+NotifyN8nIndexJob::dispatch([
+  'procesos_id' => $proceso->id,
+  'version'     => (int) $proceso->version,
+  'action'      => 'diagnostic_ping',
+  'codigo'      => (string) $proceso->codigo,
+  'titulo'      => (string) ($proceso->nombre_proceso ?? $proceso->codigo),
+  'ruta'        => (string) $proceso->ruta,
+])->onQueue('n8n');
+Log::info('[SGC] NotifyN8nIndexJob encolado (diagnostic_ping)', ['proceso_id' => $proceso->id]);
     return redirect()->route('adminSGCAll')->with('success', 'Proceso eliminado correctamente.');
 
 }
@@ -249,5 +263,6 @@ public function destroy($id)
     return redirect()->route('adminSGCAll')->with('success', 'Proceso eliminado correctamente.');
 
 }
+
 }
 

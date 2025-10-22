@@ -34,5 +34,11 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'n8n' => [
+    'index_webhook' => env('N8N_INDEX_WEBHOOK'),
+    'hmac_secret'   => env('N8N_HMAC_SECRET', ''),
+    'timeout'       => 20,   // seg
+  ],
+    
 
 ];

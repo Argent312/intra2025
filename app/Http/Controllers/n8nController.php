@@ -51,7 +51,7 @@ class n8nController extends Controller
         }
 
         // 4) Enviar a tu webhook de n8n
-        $webhookUrl = 'http://localhost:5678/webhook-test/fd1dd49a-a8a1-4c2b-882f-b9e0654a3f66';
+        $webhookUrl = 'https://n8n.carpin.mx/webhook-test/e63d4391-5d1b-44cf-a8b9-25448c471969';
 
         $response = $http->post($webhookUrl, $payload);
 
